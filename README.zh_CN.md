@@ -1,3 +1,7 @@
+<p align="center">
+  <strong>🇨🇳 简体中文</strong> · <a href="README.en_US.md">🇬🇧 English</a>
+</p>
+
 # Tool Box 🐧
 
 浏览器端工具集，纯前端实现，无需后端，开箱即用。
@@ -45,6 +49,11 @@ Tool_Box/
 └── watermark/          # 照片水印添加
 ```
 
-## License
+### 开发说明
+本项目部分代码整理、文案撰写与结构优化由AI辅助完成，整体功能设计、逻辑调试与迭代优化均由作者独立完成。
 
+### 支持
+如果这套工具箱对你有用，麻烦点亮仓库 Star，你的支持是我持续更新、新增工具的最大动力！
+
+## License
 MIT
