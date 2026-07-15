@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文本统计 - Tool Box</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --bg: #0f1117; --bg2: #1a1c25; --bg3: #242733;
+    --text: #e1e4ed; --text2: #8b8fa3;
+    --accent: #6c8aff;
+    --border: #2e3140; --radius: 10px;
+}
+body {
+    font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    line-height: 1.6;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+header a {
+    text-decoration: none; color: var(--text2); font-size: 20px;
+    transition: color .2s;
+}
+header a:hover { color: var(--text); }
+header h1 { font-size: 20px; font-weight: 600; }
+
+textarea {
+    width: 100%; height: 240px; padding: 14px 16px;
+    background: var(--bg2); color: var(--text); border: 1px solid var(--border);
+    border-radius: var(--radius); font-size: 14px; line-height: 1.7;
+    resize: vertical; outline: none; font-family: inherit;
+    transition: border-color .2s;
+}
+textarea:focus { border-color: var(--accent); }
+
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 20px; }
+.toolbar .info { font-size: 12px; color: var(--text2); }
+.toolbar .info span { color: var(--text); font-weight: 600; }
+.toolbar button {
+    padding: 6px 16px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text2); cursor: pointer; font-size: 13px;
+    transition: border-color .2s, color .2s;
+}
+.toolbar button:hover { border-color: var(--text2); color: var(--text); }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.stat-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; text-align: center;
+}
+.stat-card .value { font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1.2; }
+.stat-card .label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); text-align: center; color: var(--text2); font-size: 12px; }
+
+@media (max-width: 640px) {
+    .container { padding: 20px 14px 40px; }
+    textarea { height: 180px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+    <a href="../index.html">←</a>
+    <h1>文本统计</h1>
+</header>
+
+<textarea id="input" placeholder="在此输入或粘贴文本，实时统计..." spellcheck="false"></textarea>
+
+<div class="toolbar">
+    <div class="info">共 <span id="charCountLive">0</span> 字符</div>
+    <button id="clearBtn">清空</button>
+</div>
+
+<div class="stats-grid" id="statsGrid"></div>
+
+<footer>Tool Box &copy; 2026 &middot; SuzunaCodeHime</footer>
+
+</div>
+
+<script>
+const input = document.getElementById('input');
+const clearBtn = document.getElementById('clearBtn');
+const charCountLive = document.getElementById('charCountLive');
+const statsGrid = document.getElementById('statsGrid');
+
+const STATS = [
+    { key: 'chars', label: '总字符数（含空格）' },
+    { key: 'charsNoSpace', label: '总字符数（不含空格）' },
+    { key: 'cjk', label: '中文字数' },
+    { key: 'words', label: '单词数' },
+    { key: 'lines', label: '行数' },
+    { key: 'paragraphs', label: '段落数' },
+    { key: 'numbers', label: '数字数' },
+    { key: 'punctuation', label: '标点数' },
+    { key: 'readTime', label: '阅读时间' },
+    { key: 'longestLine', label: '最长行' },
+    { key: 'shortestLine', label: '最短行' },
+];
+
+function calc(text) {
+    const chars = text.length;
+    const charsNoSpace = text.replace(/[\s]/g, '').length;
+    const cjk = (text.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g) || []).length;
+    const words = text.trim() ? (text.trim().split(/[\s]+/).length) : 0;
+    const lines = text ? text.split('\n').length : 0;
+    const paragraphs = text ? text.split(/\n\s*\n/).filter(p => p.trim()).length : 0;
+    const numbers = (text.match(/[0-9]/g) || []).length;
+    const punctuation = (text.match(/[，。！？、；：""''（）【】《》——……·,.\!?;:()\[\]{}""''<>\/\-_@#$%^&*~`]/g) || []).length;
+
+    const cjkReadTime = Math.ceil(cjk / 300);
+    const enReadTime = Math.ceil(words / 200);
+    const readTime = cjkReadTime + enReadTime;
+    const readTimeStr = readTime === 0 ? '< 1 分钟' : `约 ${readTime} 分钟`;
+
+    const linesArr = text.split('\n');
+    let longestLen = 0, shortestLen = Infinity;
+    for (const l of linesArr) {
+        const len = l.length;
+        if (len > longestLen) longestLen = len;
+        if (len < shortestLen) shortestLen = len;
+    }
+    if (linesArr.length <= 1) shortestLen = longestLen;
+
+    return { chars, charsNoSpace, cjk, words, lines, paragraphs, numbers, punctuation, readTime: readTimeStr, longestLine: longestLen + ' 字符', shortestLine: shortestLen + ' 字符' };
+}
+
+function render() {
+    const data = calc(input.value);
+    charCountLive.textContent = data.chars;
+    statsGrid.innerHTML = STATS.map(s => `<div class="stat-card"><div class="value">${data[s.key]}</div><div class="label">${s.label}</div></div>`).join('');
+}
+
+clearBtn.addEventListener('click', () => { input.value = ''; render(); });
+input.addEventListener('input', render);
+render();
+</script>
+</body>
+</html>
