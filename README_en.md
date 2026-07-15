@@ -24,6 +24,7 @@ A browser-side toolset, pure frontend implementation, no backend required, ready
 | Photo Metadata Viewer | EXIF / IPTC / XMP metadata parsing, GPS location, JSON export | exifr |
 | Chinese Converter | Simplified ↔ Traditional Chinese real-time conversion, supports light/dark theme toggle | OpenCC |
 | Watermark Tool | Text/image watermark, batch processing, template presets, ZIP download | JSZip |
+| Fancy Text Converter | Plain text → mathematical bold/italic/script/fraktur/double-struck/circled etc. 9 styles | None |
 | Markdown Preview | Live rendering, syntax highlighting, GFM tables/task lists/code blocks | marked + highlight.js |
 
 ## Usage
@@ -46,7 +47,8 @@ Tool_Box/
 ├── exif-viewer/        # Photo Metadata Viewer
 ├── zh-convert/         # Chinese Converter
 ├── markdown-preview/   # Markdown Preview
-└── watermark/          # Watermark Tool
+├── watermark/          # Watermark Tool
+└── fancy-text/         # Fancy Text Converter
 ```
 
 ### Development Notes
