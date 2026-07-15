@@ -20,6 +20,7 @@
 | 照片信息查看 | EXIF / IPTC / XMP 元数据解析，GPS 定位，导出 JSON | exifr |
 | 简繁转换 | 简体 ↔ 繁体实时转换，支持明暗主题切换 | OpenCC |
 | 照片水印添加 | 文字/图片水印，批量处理，模板预设，ZIP 打包下载 | JSZip |
+| Markdown 预览 | 实时渲染，语法高亮，GFM 表格/任务列表/代码块 | marked + highlight.js |
 
 ## 使用
 
@@ -40,6 +41,7 @@ Tool_Box/
 ├── dof-calculator/     # 焦平面计算器
 ├── exif-viewer/        # 照片信息查看
 ├── zh-convert/         # 简繁转换
+├── markdown-preview/   # Markdown 预览
 └── watermark/          # 照片水印添加
 ```
 
