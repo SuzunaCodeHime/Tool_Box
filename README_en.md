@@ -25,6 +25,7 @@ A browser-side toolset, pure frontend implementation, no backend required, ready
 | Chinese Converter | Simplified ↔ Traditional Chinese real-time conversion, supports light/dark theme toggle | OpenCC |
 | Watermark Tool | Text/image watermark, batch processing, template presets, ZIP download | JSZip |
 | Fancy Text Converter | Plain text → mathematical bold/italic/script/fraktur/double-struck/circled etc. 9 styles | None |
+| AI Image Generation | Multi-provider (OpenAI / ZhiPu / Stability / Replicate), history, API code examples | None |
 | Markdown Preview | Live rendering, syntax highlighting, GFM tables/task lists/code blocks | marked + highlight.js |
 
 ## Usage
@@ -48,7 +49,8 @@ Tool_Box/
 ├── zh-convert/         # Chinese Converter
 ├── markdown-preview/   # Markdown Preview
 ├── watermark/          # Watermark Tool
-└── fancy-text/         # Fancy Text Converter
+├── fancy-text/         # Fancy Text Converter
+└── image-gen/          # AI Image Generation
 ```
 
 ### Development Notes
